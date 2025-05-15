@@ -18,4 +18,22 @@ const login = async (req, res) => {
   }
 };
 
-module.exports = { register, login };
+const verify = (req, res) => {
+  const authHeader = req.headers.authorization;
+
+  if (!authHeader) {
+    return res.status(401).json({ error: 'Token não fornecido.' });
+  }
+
+  const token = authHeader.split(' ')[1];
+  console.log(token)
+  const result = authService.verifyToken(token);
+
+  if (!result.valid) {
+    return res.status(401).json({ error: 'Token inválido ou expirado.' });
+  }
+
+  res.json({ user: result.payload });
+};
+
+module.exports = { register, login, verify };

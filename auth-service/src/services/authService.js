@@ -28,4 +28,14 @@ const login = async (email, password) => {
   return { user, token };
 };
 
-module.exports = { register, login };
+const verifyToken = (token) => {
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    return { valid: true, payload: decoded };
+  } catch (error) {
+    console.error(error)
+    return { valid: false, error };
+  }
+};
+
+module.exports = { register, login, verifyToken };

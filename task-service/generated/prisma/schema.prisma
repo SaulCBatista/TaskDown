@@ -1,0 +1,26 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Milestone {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String
+  deadline    DateTime
+  issues      Issue[]
+}
+
+model Issue {
+  id          Int       @id @default(autoincrement())
+  title       String
+  description String
+  progress    Int
+  milestoneId Int
+  milestone   Milestone @relation(fields: [milestoneId], references: [id])
+}
